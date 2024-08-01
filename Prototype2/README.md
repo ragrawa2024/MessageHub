@@ -1,1 +1,2 @@
-# Use TCPListener and TCPClient classes to create a messaging program.
+# MessageHub
+Real-time communication
