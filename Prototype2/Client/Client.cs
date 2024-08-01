@@ -80,17 +80,20 @@ void SendPackets()
 
         string pattern = @"(\d+)(\D+)";
         Match match = Regex.Match(messageToSend, pattern);
+        int spaceIndex = messageToSend.IndexOf(' ');
 
-        if (match.Success)
+        if (match.Success && spaceIndex > 0)
         {
             int opCode = int.Parse(match.Groups[1].Value);
-            string msgText = match.Groups[2].Value;
+        
+            string msgText = messageToSend.Substring(spaceIndex);
+
             var packet = outStream.CreateMessagePacket(opCode, msgText);
             client.GetStream().Write(packet);
         }
         else
         {
-            Console.WriteLine("Please enter <opcode><string>");
+            Console.WriteLine("Please send messages in the format of <OpCode> <Message>");
         }
 
         outgoingMessages.RemoveAt(0);
