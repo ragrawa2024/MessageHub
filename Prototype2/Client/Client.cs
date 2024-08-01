@@ -14,6 +14,7 @@ try
 {
     client.Connect(Constants.Address, Constants.PORT);
     Console.WriteLine("Connected to the server!");
+    Console.WriteLine("Send messages in the format of <OpCode> <Message>");
 }
 catch (Exception ex)
 {
