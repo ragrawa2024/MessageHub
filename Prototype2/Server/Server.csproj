@@ -8,6 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\framework\framework.csproj" />
+    <ProjectReference Include="..\Framework\Framework.csproj" />
   </ItemGroup>
 </Project>
