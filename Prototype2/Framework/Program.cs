@@ -22,7 +22,7 @@ public class MessagePacket
     public DateTime TimeStamp { get; set;}
     public int clientID { get; set; }
     public int opCode { get; set; }
-    public string msg { get; set; }
+    public string? msg { get; set; }
 }
 
 public class PacketMaker

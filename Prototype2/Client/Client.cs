@@ -31,7 +31,7 @@ PacketMaker outStream = new PacketMaker();
 List<string> outgoingMessages = new List<string>();
 
 // Task to continuously read input from the console and add it to the outgoingMessages list
-new TaskFactory().StartNew(() =>
+Task task = new TaskFactory().StartNew(() =>
 {
     while (true)
     {
