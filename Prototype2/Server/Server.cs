@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
@@ -29,9 +29,28 @@ internal class Program
         const string filePath = @"MessageLog.json";
         CreateLogFile(filePath);
 
+        // Task to continuously read input from the console and broadcast to all
+        new TaskFactory().StartNew(() =>
+        {
+            while (true)
+            {
+                var messageToSend = Console.ReadLine();
+                if (!String.IsNullOrEmpty(messageToSend))
+                {
+                    Broadcast(messageToSend);
+                }
+                else
+                {
+                    Broadcast("Server shutting down ....");
+                    listener.Stop();
+                    Environment.Exit(0);
+                }
+            }
+        });
+
         while (true)
         {
-            // Accept up to 5 pending client connections
+            // Accept client connections
             if (_clients.Count() < Constants.MAXCLIENTS)
                 AcceptClients();
 
@@ -53,6 +72,8 @@ internal class Program
                 int clientId = nextClientId++;
                 _clients.Add(clientId, client);
                 Console.WriteLine($"Client {clientId} connected.");
+
+                Broadcast($"We now have {clientId} clients.");  // inform everyone
             }
         }
 
@@ -85,13 +106,14 @@ internal class Program
 
                     // Broadcast received message to all other connected clients depending on the opCode
                     if (opCode == 1)
-                        Broadcast(client.Value, message);
+                        Broadcast(message, client.Value);
                 }
             }
         }
 
         // Function to broadcast a message from one client to all other connected clients
-        void Broadcast(TcpClient sender, string message)
+        // if sender == null, then Broadcast to all.
+        void Broadcast(string message, TcpClient? sender = null)
         {
             foreach (var client in _clients.Values.Where(x => x != sender))    // skip sending the message back to the sender
             {
@@ -109,7 +131,6 @@ internal class Program
 
         void CreateLogFile(string filePath)
         {
-
             // Logfile to keep track of messages
 
             try
