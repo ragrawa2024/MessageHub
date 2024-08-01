@@ -71,7 +71,7 @@ internal class Program
 
                 int clientId = nextClientId++;
                 _clients.Add(clientId, client);
-                Console.WriteLine($"Client {clientId} connected.");
+                Console.WriteLine("Client {0} connected from {1}.", clientId, client.Client.RemoteEndPoint);
 
                 Broadcast($"We now have {clientId} clients.");  // inform everyone
             }
